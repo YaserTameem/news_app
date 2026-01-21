@@ -1,5 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
+import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widget/custom_text_form_filed.dart';
+import 'package:news_app/features/auth/register_screen.dart';
+import 'package:news_app/features/home/home_screen.dart';
+import 'package:news_app/features/main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,8 +20,44 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String? errorMessage;
+  bool isLoading = false;
 
-  bool isVisible = false;
+  login() async {
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 2));
+    final savedEmail = PreferencesManager().getString("user_email");
+    final savedPassword = PreferencesManager().getString("user_password");
+    if (savedEmail == null || savedPassword == null) {
+      setState(() {
+        errorMessage = "No Account Found Please Register First";
+        isLoading=false;
+      });
+      return;
+    }
+    if (savedEmail != emailController.text.trim() ||
+        savedPassword != passwordController.text.trim()) {
+      setState(() {
+        errorMessage = "Incorrect Email Or Password";
+        isLoading=false;
+      });
+      return;
+
+    }
+    await PreferencesManager().setBool("is_logged_in", true);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen()),
+    );
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +71,10 @@ class _LoginScreenState extends State<LoginScreen> {
             fit: BoxFit.fill,
           ),
         ),
-        child: Form(
-          key: _key,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _key,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,25 +93,93 @@ class _LoginScreenState extends State<LoginScreen> {
                   emailController: emailController,
                   title: 'Email',
                   hintText: 'usama@gmail.com',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Email';
+                    }
+                    // final RegExp emailRegex = RegExp(
+                    //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                    // );
+                    // if (!emailRegex.hasMatch(value)) {
+                    //   return 'Please Enter Valid Email';
+                    // }
+                    return null;
+                  },
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 24),
                 CustomTextFormField(
                   emailController: passwordController,
                   title: 'Password',
                   hintText: '*************',
-                  suffix: IconButton(
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter password';
+                    }
+
+                    final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
+
+                    if (!passwordRegex.hasMatch(value)) {
+                      return 'Password must be at least 8 characters';
+                    }
+                    return null;
+                  },
+                ),
+                if (errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        isVisible = !isVisible;
-                      });
+                      if (_key.currentState?.validate() ?? false) {
+                        login();
+                      }
                     },
-                    icon:
-                        isVisible
-                            ? Icon(Icons.visibility_off_outlined)
-                            : Icon(Icons.visibility_outlined),
+                    child:isLoading?CircularProgressIndicator(): Text('Sign In'),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 24),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don’t have an account ?  ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: LightColors.textPrimaryColor,
+                      ),
+
+                      children: [
+                        TextSpan(
+                          recognizer:
+                              TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RegisterScreen(),
+                                    ),
+                                  );
+                                },
+                          text: 'Sign Up',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

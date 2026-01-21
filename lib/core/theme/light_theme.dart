@@ -6,7 +6,9 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: LightColors.scaffoldBackground,
   primaryColor: LightColors.primaryColor,
-
+progressIndicatorTheme: ProgressIndicatorThemeData(
+  color: LightColors.textPrimaryColor
+),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: LightColors.primaryColor,
