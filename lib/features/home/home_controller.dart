@@ -11,17 +11,24 @@ class HomeController with ChangeNotifier {
   RequestStatusEnum everythingStatus = RequestStatusEnum.loading;
   RequestStatusEnum topHeadLineStatus = RequestStatusEnum.loading;
   String? errorMessage;
+  String? selectedCategories;
 
   HomeController() {
     getTopHeadLine();
     getEverything();
   }
 
-  getTopHeadLine() async {
+  getTopHeadLine({String? category}) async {
     try {
-      Map<String, dynamic> result = await apiService.get(ApiConfig.topHeadlines, {'country': 'us'});
+       topHeadLineStatus = RequestStatusEnum.loading;
+       notifyListeners();
+      Map<String, dynamic> result = await apiService.get(ApiConfig.topHeadlines, {
+        'country': 'us',
+        'category': selectedCategories,
+      });
 
-      newsTopHeadLineList = (result["articles"] as List).map((e) => NewsArticlesModel.fromJson(e)).toList();
+      newsTopHeadLineList =
+          (result["articles"] as List).map((e) => NewsArticlesModel.fromJson(e)).toList();
       topHeadLineStatus = RequestStatusEnum.loaded;
       errorMessage = null;
     } catch (e) {
@@ -35,13 +42,20 @@ class HomeController with ChangeNotifier {
     try {
       Map<String, dynamic> result = await apiService.get(ApiConfig.everything, {'q': 'ai'});
 
-      newsEverythingList = (result["articles"] as List).map((e) => NewsArticlesModel.fromJson(e)).toList();
+      newsEverythingList =
+          (result["articles"] as List).map((e) => NewsArticlesModel.fromJson(e)).toList();
       everythingStatus = RequestStatusEnum.loaded;
       errorMessage = null;
     } catch (e) {
       errorMessage = e.toString();
       everythingStatus = RequestStatusEnum.error;
     }
+    notifyListeners();
+  }
+
+  void updateSelectedCategories(String category) {
+    selectedCategories = category;
+    getTopHeadLine(category: selectedCategories);
     notifyListeners();
   }
 }

@@ -6,9 +6,16 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: LightColors.scaffoldBackground,
   primaryColor: LightColors.primaryColor,
-progressIndicatorTheme: ProgressIndicatorThemeData(
-  color: LightColors.textPrimaryColor
-),
+  progressIndicatorTheme: ProgressIndicatorThemeData(color: LightColors.textPrimaryColor),
+  appBarTheme: AppBarTheme(
+    titleTextStyle: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: LightColors.textPrimaryColor,
+    ),
+    backgroundColor: Colors.white,
+    centerTitle: true,
+  ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: LightColors.primaryColor,

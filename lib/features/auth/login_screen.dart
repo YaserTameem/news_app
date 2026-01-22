@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/theme/light_colors.dart';
-import 'package:news_app/core/widget/custom_text_form_filed.dart';
+import 'package:news_app/core/widgets/custom_text_form_filed.dart';
 import 'package:news_app/features/auth/register_screen.dart';
 import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';

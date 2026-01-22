@@ -24,7 +24,7 @@ class ViewAllComponent extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () => onTap,
+            onPressed: () => onTap(),
             child: Text(
               "View all",
               style: TextStyle(
