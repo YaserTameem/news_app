@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_text_form_filed.dart';
-import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -74,20 +74,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Form(
           key: _key,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding:  EdgeInsets.all(AppSizes.pw16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Image.asset("assets/images/logo.png", height: 45),
+                  child: Image.asset("assets/images/logo.png", height: AppSizes.h45),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: AppSizes.ph40),
                 Text(
                   "Welcome to Newts",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: AppSizes.ph16),
 
                 CustomTextFormField(
                   emailController: emailController,
@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   emailController: passwordController,
                   title: 'Password',
@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   emailController: confirmPasswordController,
                   title: 'Confirm Password',
@@ -146,16 +146,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 if (errorMessage != null)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding:  EdgeInsets.symmetric(vertical: AppSizes.ph8),
                     child: Text(
                       errorMessage!,
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: AppSizes.h48,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_key.currentState?.validate() ?? false) {
@@ -168,13 +168,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             : Text('Sign Up'),
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 Center(
                   child: RichText(
                     text: TextSpan(
                       text: "Have an account ?  ",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppSizes.sp14,
                         fontWeight: FontWeight.w400,
                         color: LightColors.textPrimaryColor,
                       ),
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                           text: 'Sign In',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppSizes.sp14,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context).primaryColor,
                           ),

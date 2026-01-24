@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TopHeadlineShimmer extends StatelessWidget {
@@ -10,7 +11,7 @@ class TopHeadlineShimmer extends StatelessWidget {
       itemCount: 5,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: AppSizes.pw16, vertical: AppSizes.ph12),
           child: Shimmer.fromColors(
             baseColor: Colors.grey.shade300,
             highlightColor: Colors.grey.shade100,
@@ -18,30 +19,33 @@ class TopHeadlineShimmer extends StatelessWidget {
               children: [
                 // Image placeholder
                 Container(
-                  width: 90,
-                  height: 70,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                  width: AppSizes.w90,
+                  height: AppSizes.h70,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppSizes.r8),
+                  ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: AppSizes.pw8),
 
                 // Text placeholders
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(height: 16, width: double.infinity, color: Colors.white),
-                      const SizedBox(height: 8),
+                      Container(height: AppSizes.h16, width: double.infinity, color: Colors.white),
+                      SizedBox(height: AppSizes.ph8),
                       Container(
-                        height: 14,
+                        height: AppSizes.h14,
                         width: MediaQuery.of(context).size.width * 0.4,
                         color: Colors.white,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: AppSizes.ph12),
                       Row(
                         children: [
-                          CircleAvatar(radius: 10, backgroundColor: Colors.white),
-                          const SizedBox(width: 6),
-                          Container(height: 12, width: 80, color: Colors.white),
+                          CircleAvatar(radius: AppSizes.r10, backgroundColor: Colors.white),
+                          SizedBox(width: AppSizes.pw6),
+                          Container(height: AppSizes.h12, width: AppSizes.w80, color: Colors.white),
                         ],
                       ),
                     ],
@@ -55,4 +59,3 @@ class TopHeadlineShimmer extends StatelessWidget {
     );
   }
 }
-

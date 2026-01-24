@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_text_form_filed.dart';
 import 'package:news_app/features/auth/register_screen.dart';
-import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(AppSizes.pw16),
           child: Form(
             key: _key,
             child: Column(
@@ -80,14 +80,14 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Image.asset("assets/images/logo.png", height: 45),
+                  child: Image.asset("assets/images/logo.png", height: AppSizes.h45),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: AppSizes.ph40),
                 Text(
                   "Welcome to Newts",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: AppSizes.ph16),
 
                 CustomTextFormField(
                   emailController: emailController,
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 CustomTextFormField(
                   emailController: passwordController,
                   title: 'Password',
@@ -127,16 +127,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 if (errorMessage != null)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding:  EdgeInsets.symmetric(vertical:AppSizes.ph8),
                     child: Text(
                       errorMessage!,
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: AppSizes.h48,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_key.currentState?.validate() ?? false) {
@@ -146,13 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     child:isLoading?CircularProgressIndicator(): Text('Sign In'),
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: AppSizes.ph24),
                 Center(
                   child: RichText(
                     text: TextSpan(
                       text: "Don’t have an account ?  ",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppSizes.sp14,
                         fontWeight: FontWeight.w400,
                         color: LightColors.textPrimaryColor,
                       ),
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                           text: 'Sign Up',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppSizes.sp14,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context).primaryColor,
                           ),

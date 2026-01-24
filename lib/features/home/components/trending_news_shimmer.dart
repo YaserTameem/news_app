@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TrendingNewsShimmer extends StatelessWidget {
@@ -7,23 +8,23 @@ class TrendingNewsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsets.only(left: 16),
+      padding:  EdgeInsets.only(left: AppSizes.pw16),
       scrollDirection: Axis.horizontal,
       itemCount: 5,
-      separatorBuilder: (_, _) => const SizedBox(width: 12),
+      separatorBuilder: (_, _) =>  SizedBox(width: AppSizes.pw12),
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
           baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey.shade100,
           child: SizedBox(
-            width: 240,
-            height: 140,
+            width: AppSizes.w240,
+            height: AppSizes.h140,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSizes.r16),
               child: Stack(
                 children: [
                   // Background image placeholder
-                  Container(width: 240, height: 140, color: Colors.white),
+                  Container(width: AppSizes.w240, height: AppSizes.h140, color: Colors.white),
 
                   Positioned.fill(
                     child: Container(
@@ -39,21 +40,21 @@ class TrendingNewsShimmer extends StatelessWidget {
 
                   // Text placeholders
                   Positioned(
-                    bottom: 12,
-                    right: 12,
-                    left: 12,
+                    bottom: AppSizes.h12,
+                    right: AppSizes.w12,
+                    left: AppSizes.w12,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(height: 14, width: double.infinity, color: Colors.white),
-                        const SizedBox(height: 6),
-                        Container(height: 14, width: 140, color: Colors.white),
+                        Container(height: AppSizes.h14, width: double.infinity, color: Colors.white),
+                         SizedBox(height: AppSizes.ph6),
+                        Container(height: AppSizes.h14, width: AppSizes.w140, color: Colors.white),
                         const SizedBox(height: 10),
                         Row(
                           children: [
-                            const CircleAvatar(radius: 10, backgroundColor: Colors.white),
+                             CircleAvatar(radius: AppSizes.r10, backgroundColor: Colors.white),
                             const SizedBox(width: 6),
-                            Container(height: 12, width: 80, color: Colors.white),
+                            Container(height: AppSizes.h12, width: AppSizes.w80, color: Colors.white),
                           ],
                         ),
                       ],

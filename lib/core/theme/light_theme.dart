@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 
 ThemeData lightTheme = ThemeData(
@@ -9,7 +10,7 @@ ThemeData lightTheme = ThemeData(
   progressIndicatorTheme: ProgressIndicatorThemeData(color: LightColors.textPrimaryColor),
   appBarTheme: AppBarTheme(
     titleTextStyle: TextStyle(
-      fontSize: 16,
+      fontSize: AppSizes.sp16,
       fontWeight: FontWeight.bold,
       color: LightColors.textPrimaryColor,
     ),
@@ -19,14 +20,14 @@ ThemeData lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: LightColors.primaryColor,
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      textStyle: TextStyle(fontSize: AppSizes.sp16, fontWeight: FontWeight.w400),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: LightColors.buttonTextColor,
       backgroundColor: LightColors.primaryColor,
-      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      textStyle: TextStyle(fontSize: AppSizes.sp16, fontWeight: FontWeight.w400),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     ),
   ),
@@ -36,8 +37,8 @@ ThemeData lightTheme = ThemeData(
     unselectedItemColor: LightColors.textSecondaryColor,
     selectedItemColor: LightColors.primaryColor,
     showUnselectedLabels: true,
-    selectedLabelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-    unselectedLabelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+    selectedLabelStyle: TextStyle(fontSize: AppSizes.sp12, fontWeight: FontWeight.w700),
+    unselectedLabelStyle: TextStyle(fontSize: AppSizes.sp12, fontWeight: FontWeight.w700),
   ),
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(color: LightColors.textSecondaryColor),

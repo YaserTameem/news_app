@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/app_sizes.dart';
 
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
@@ -34,9 +35,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       children: [
         Text(
           widget.title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: AppSizes.sp16, fontWeight: FontWeight.w400),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: AppSizes.ph8),
         TextFormField(
           controller: widget.emailController,
           validator:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/auth/login_screen.dart';
+import 'package:news_app/features/main/main_screen.dart';
 import 'package:news_app/features/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,34 +19,22 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateAfterSplash();
   }
 
-  void _navigateAfterSplash()async {
+  void _navigateAfterSplash() async {
     await Future.delayed(Duration(seconds: 1));
-    final onboardingComplete =
-        PreferencesManager().getBool('onboarding_complete') ?? false;
+    final onboardingComplete = PreferencesManager().getBool('onboarding_complete') ?? false;
     final isLoggedIn = PreferencesManager().getBool('is_logged_in') ?? false;
-    if(!mounted)return;
+    if (!mounted) return;
     if (!onboardingComplete) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
     } else if (!isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );
-    }else{
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    } else {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Image.asset('assets/images/splash.png', width: double.infinity),
-    );
+    return Scaffold(body: Image.asset('assets/images/splash.png', width: double.infinity));
   }
 }
