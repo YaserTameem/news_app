@@ -4,6 +4,7 @@ import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/core/extensions/date_time_extension.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_cached_network_image.dart';
+import 'package:news_app/features/details/news_details_screen.dart';
 import 'package:news_app/features/home/categories_screen.dart';
 import 'package:news_app/features/home/components/trending_news_shimmer.dart';
 import 'package:news_app/features/home/components/view_all_component.dart';
@@ -54,94 +55,105 @@ class TrendingNews extends StatelessWidget {
                           case RequestStatusEnum.loaded:
                             return ListView.separated(
                               padding: EdgeInsets.only(left: AppSizes.pw16),
-                              separatorBuilder: (BuildContext context, int index) => SizedBox(width: AppSizes.w12),
+                              separatorBuilder:
+                                  (BuildContext context, int index) => SizedBox(width: AppSizes.w12),
                               scrollDirection: Axis.horizontal,
                               itemCount: value.newsEverythingList.take(5).length,
                               itemBuilder: (context, index) {
                                 final model = value.newsEverythingList[index];
-                                return SizedBox(
-                                  width: AppSizes.w240,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(AppSizes.r16),
-                                    child: Stack(
-                                      children: [
-                                        CustomCachedNetworkImage(
-                                          imageUrl: model.urlToImage,
-                                          height: AppSizes.h140,
-                                          width: AppSizes.w240,
-                                        ),
-                                        Positioned.fill(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  Colors.black.withValues(alpha: 0.5),
-                                                  Colors.black.withValues(alpha: 0.7),
-                                                ],
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NewsDetailsScreen(model: model),
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    width: AppSizes.w240,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(AppSizes.r16),
+                                      child: Stack(
+                                        children: [
+                                          CustomCachedNetworkImage(
+                                            imageUrl: model.urlToImage,
+                                            height: AppSizes.h140,
+                                            width: AppSizes.w240,
+                                          ),
+                                          Positioned.fill(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.black.withValues(alpha: 0.5),
+                                                    Colors.black.withValues(alpha: 0.7),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Positioned(
-                                          bottom: AppSizes.h12,
-                                          right: AppSizes.w12,
-                                          left: AppSizes.w12,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                model.title,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: AppSizes.sp14,
-                                                  color: LightColors.buttonTextColor,
+                                          Positioned(
+                                            bottom: AppSizes.h12,
+                                            right: AppSizes.w12,
+                                            left: AppSizes.w12,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  model.title,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: AppSizes.sp14,
+                                                    color: LightColors.buttonTextColor,
+                                                  ),
+                                                  maxLines: 2,
                                                 ),
-                                                maxLines: 2,
-                                              ),
-                                              SizedBox(height: AppSizes.ph6),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          backgroundImage: NetworkImage(
-                                                            model.urlToImage.toString(),
-                                                          ),
-                                                          radius: AppSizes.r10,
-                                                        ),
-                                                        SizedBox(width: AppSizes.pw4),
-                                                        Expanded(
-                                                          child: Text(
-                                                            model.author,
-                                                            style: TextStyle(
-                                                              fontSize: AppSizes.sp12,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: LightColors.buttonTextColor,
+                                                SizedBox(height: AppSizes.ph6),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            backgroundImage: NetworkImage(
+                                                              model.urlToImage.toString(),
                                                             ),
-                                                            maxLines: 1,
+                                                            radius: AppSizes.r10,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          SizedBox(width: AppSizes.pw4),
+                                                          Expanded(
+                                                            child: Text(
+                                                              model.author,
+                                                              style: TextStyle(
+                                                                fontSize: AppSizes.sp12,
+                                                                fontWeight: FontWeight.w400,
+                                                                color: LightColors.buttonTextColor,
+                                                              ),
+                                                              maxLines: 1,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    model.publishedAt.formatDateTime(),
-                                                    style: TextStyle(
-                                                      fontSize: AppSizes.sp14,
-                                                      fontWeight: FontWeight.w400,
-                                                      color: LightColors.buttonTextColor,
+                                                    Text(
+                                                      model.publishedAt.formatDateTime(),
+                                                      style: TextStyle(
+                                                        fontSize: AppSizes.sp14,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: LightColors.buttonTextColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

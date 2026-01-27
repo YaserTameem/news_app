@@ -15,11 +15,11 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
 
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   String? errorMessage;
 
@@ -40,22 +40,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isLoading = false;
       });
     } else {
-      await PreferencesManager().setString(
-        "user_email",
-        emailController.text.trim(),
-      );
-      await PreferencesManager().setString(
-        "user_password",
-        passwordController.text.trim(),
-      );
+      await PreferencesManager().setString("user_email", emailController.text.trim());
+      await PreferencesManager().setString("username", usernameController.text.trim());
+      await PreferencesManager().setString("user_password", passwordController.text.trim());
       await PreferencesManager().setBool("is_logged_in", true);
       setState(() {
         isLoading = true;
       });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
   }
 
@@ -74,130 +66,145 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Form(
           key: _key,
           child: Padding(
-            padding:  EdgeInsets.all(AppSizes.pw16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Image.asset("assets/images/logo.png", height: AppSizes.h45),
-                ),
-                SizedBox(height: AppSizes.ph40),
-                Text(
-                  "Welcome to Newts",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
-                ),
-                SizedBox(height: AppSizes.ph16),
-
-                CustomTextFormField(
-                  emailController: emailController,
-                  title: 'Email',
-                  hintText: 'usama@gmail.com',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please Enter Email';
-                    }
-                    // final RegExp emailRegex = RegExp(
-                    //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                    // );
-                    // if (!emailRegex.hasMatch(value)) {
-                    //   return 'Please Enter Valid Email';
-                    // }
-                    return null;
-                  },
-                ),
-                SizedBox(height: AppSizes.ph24),
-                CustomTextFormField(
-                  emailController: passwordController,
-                  title: 'Password',
-                  hintText: '*************',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-
-                    final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
-
-                    if (!passwordRegex.hasMatch(value)) {
-                      return 'Password must be at least 8 characters';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: AppSizes.ph24),
-                CustomTextFormField(
-                  emailController: confirmPasswordController,
-                  title: 'Confirm Password',
-                  hintText: '*************',
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-
-                    final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
-
-                    if (!passwordRegex.hasMatch(value)) {
-                      return 'Password must be at least 8 characters';
-                    }
-                    return null;
-                  },
-                ),
-                if (errorMessage != null)
-                  Padding(
-                    padding:  EdgeInsets.symmetric(vertical: AppSizes.ph8),
-                    child: Text(
-                      errorMessage!,
-                      style: TextStyle(color: Colors.red),
+            padding: EdgeInsets.all(AppSizes.pw16),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: Image.asset("assets/images/logo.png", height: AppSizes.h45)),
+                    SizedBox(height: AppSizes.ph40),
+                    Text(
+                      "Welcome to Newts",
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
                     ),
-                  ),
-                SizedBox(height: AppSizes.ph24),
-                SizedBox(
-                  width: double.infinity,
-                  height: AppSizes.h48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_key.currentState?.validate() ?? false) {
-                        register();
-                      }
-                    },
-                    child:
-                        isLoading
-                            ? CircularProgressIndicator()
-                            : Text('Sign Up'),
-                  ),
-                ),
-                SizedBox(height: AppSizes.ph24),
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Have an account ?  ",
-                      style: TextStyle(
-                        fontSize: AppSizes.sp14,
-                        fontWeight: FontWeight.w400,
-                        color: LightColors.textPrimaryColor,
-                      ),
+                    SizedBox(height: AppSizes.ph16),
 
-                      children: [
-                        TextSpan(
-                          recognizer:
-                              TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.pop(context);
-                                },
-                          text: 'Sign In',
+                    CustomTextFormField(
+                      controller: emailController,
+                      title: 'Email',
+                      hintText: 'usama@gmail.com',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Email';
+                        }
+                        // final RegExp emailRegex = RegExp(
+                        //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                        // );
+                        // if (!emailRegex.hasMatch(value)) {
+                        //   return 'Please Enter Valid Email';
+                        // }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: AppSizes.ph16),
+
+                    CustomTextFormField(
+                      controller: usernameController,
+                      title: 'User Name',
+                      hintText: 'Yaser Tameem',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Username';
+                        }
+                        // final RegExp emailRegex = RegExp(
+                        //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                        // );
+                        // if (!emailRegex.hasMatch(value)) {
+                        //   return 'Please Enter Valid Email';
+                        // }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: passwordController,
+                      title: 'Password',
+                      hintText: '*************',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter password';
+                        }
+
+                        final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
+
+                        if (!passwordRegex.hasMatch(value)) {
+                          return 'Password must be at least 8 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    CustomTextFormField(
+                      controller: confirmPasswordController,
+                      title: 'Confirm Password',
+                      hintText: '*************',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter password';
+                        }
+
+                        final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
+
+                        if (!passwordRegex.hasMatch(value)) {
+                          return 'Password must be at least 8 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    if (errorMessage != null)
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
+                        child: Text(errorMessage!, style: TextStyle(color: Colors.red)),
+                      ),
+                    SizedBox(height: AppSizes.ph24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: AppSizes.h48,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_key.currentState?.validate() ?? false) {
+                            register();
+                          }
+                        },
+                        child: isLoading ? CircularProgressIndicator() : Text('Sign Up'),
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.ph24),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Have an account ?  ",
                           style: TextStyle(
                             fontSize: AppSizes.sp14,
                             fontWeight: FontWeight.w400,
-                            color: Theme.of(context).primaryColor,
+                            color: LightColors.textPrimaryColor,
                           ),
+
+                          children: [
+                            TextSpan(
+                              recognizer:
+                                  TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pop(context);
+                                    },
+                              text: 'Sign In',
+                              style: TextStyle(
+                                fontSize: AppSizes.sp14,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

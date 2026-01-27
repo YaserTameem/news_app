@@ -4,7 +4,7 @@ import 'package:news_app/core/constants/app_sizes.dart';
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     super.key,
-    required this.emailController,
+    required this.controller,
     required this.title,
     required this.hintText,
     this.validator,
@@ -13,7 +13,7 @@ class CustomTextFormField extends StatefulWidget {
     this.obscureText = false,
   });
 
-  final TextEditingController emailController;
+  final TextEditingController controller;
   final String title;
   final String hintText;
   final Function(String?)? validator;
@@ -39,7 +39,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
         SizedBox(height: AppSizes.ph8),
         TextFormField(
-          controller: widget.emailController,
+          controller: widget.controller,
           validator:
               widget.validator != null
                   ? (String? value) => widget.validator!(value)

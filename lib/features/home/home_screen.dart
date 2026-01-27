@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/datasource/remote_data/api_service.dart';
+import 'package:news_app/core/repos/news_repository.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/features/home/components/categories_list.dart';
 import 'package:news_app/features/home/components/top_headline.dart';
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext _) {
     return ChangeNotifierProvider(
-      create: (context) => HomeController(),
+      create: (context) => HomeController(NewsRepository(ApiService())),
       child: Consumer<HomeController>(
         builder: (BuildContext context, HomeController value, Widget? child) {
           // final controller = context.read<HomeController>();
