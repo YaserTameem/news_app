@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_text_form_filed.dart';
 import 'package:news_app/features/main/main_screen.dart';
@@ -33,22 +34,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isLoading = true;
     });
     await Future.delayed(Duration(seconds: 2));
-    final savedEmail = PreferencesManager().getString("user_email");
-    if (savedEmail != null && savedEmail == emailController.text.trim()) {
+    final String? error = await UserRepository().signUp(
+      name: usernameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+    );
+    if (error != null) {
       setState(() {
-        errorMessage = 'User Already Register';
+        errorMessage = error;
         isLoading = false;
       });
-    } else {
-      await PreferencesManager().setString("user_email", emailController.text.trim());
-      await PreferencesManager().setString("username", usernameController.text.trim());
-      await PreferencesManager().setString("user_password", passwordController.text.trim());
-      await PreferencesManager().setBool("is_logged_in", true);
-      setState(() {
-        isLoading = true;
-      });
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+      return;
     }
+    await PreferencesManager().setBool("is_logged_in", true);
+    setState(() {
+      isLoading = true;
+    });
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
   }
 
   @override

@@ -10,6 +10,13 @@ class UserRepository {
   factory UserRepository() => _instance;
   Box<UserModel>? _userBox;
 
+  Box<UserModel> get userBox {
+    if (_userBox == null) {
+      throw Exception("UserRepository not initialized.");
+    }
+    return _userBox!;
+  }
+
   init() async {
     await Hive.initFlutter();
     if (!Hive.isAdapterRegistered(0)) {
@@ -19,11 +26,11 @@ class UserRepository {
   }
 
   saveUser(UserModel user) async {
-    await _userBox?.put(Constants.currentUser, user);
+    await userBox.put(Constants.currentUser, user);
   }
 
   getUser() {
-    return _userBox?.get(Constants.currentUser);
+    return userBox.get(Constants.currentUser);
   }
 
   updateUser({
@@ -44,5 +51,34 @@ class UserRepository {
       );
       await saveUser(updatedUser);
     }
+  }
+
+  deleteUser() async {
+    await userBox.delete(Constants.currentUser);
+  }
+
+  clearAll() async {
+    await userBox.clear();
+  }
+
+  String? login(String email, String password) {
+    final user = getUser();
+    if (user == null) {
+      return 'No Account Found Please Register First';
+    }
+    if (user.email != email || user.password != password) {
+      return 'Incorrect Email Or Password';
+    }
+    return null;
+  }
+
+  Future<String?> signUp({required String name, required String email, required String password}) async {
+    final existingUser = getUser();
+    if (existingUser != null) {
+      return 'An account with this email already exists';
+    }
+    final newUser = UserModel(name: name, email: email, password: password);
+    await saveUser(newUser);
+    return null;
   }
 }
