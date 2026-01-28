@@ -32,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
     await Future.delayed(Duration(seconds: 2));
     // final savedEmail = PreferencesManager().getString("user_email");
     // final savedPassword = PreferencesManager().getString("user_password");
-   final String? error= UserRepository().login(emailController.text.trim(), passwordController.text.trim());
-    if (error != null ) {
+    final String? error = await UserRepository().login(emailController.text.trim(), passwordController.text.trim());
+    if (error != null) {
       setState(() {
         errorMessage = error;
         isLoading = false;

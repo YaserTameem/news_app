@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
-import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/models/user_model.dart';
 import 'package:news_app/core/widgets/custom_text_form_filed.dart';
@@ -25,10 +24,12 @@ class _ProfileInfoBottomSheetState extends State<ProfileInfoBottomSheet> {
     _loadUserData();
   }
 
-  void _loadUserData() {
-    final UserModel user = UserRepository().getUser();
-    usernameController.text = user.email;
-    emailController.text = user.name;
+  Future<void> _loadUserData() async {
+    final UserModel? user = await UserRepository().getUser();
+    if (user != null) {
+      usernameController.text = user.name;
+      emailController.text = user.email;
+    }
   }
 
   void _saveUserData() async {

@@ -20,11 +20,11 @@ class ProfileController extends ChangeNotifier with SafeNotify {
     safeNotify();
   }
 
-  getUserData() {
-    final UserModel? user=UserRepository().getUser();
-  username = user?.name ?? '';
-  countryName = user?.countryName;
-  countryCode = user?.countryCode;
+  Future<void> getUserData() async {
+    final UserModel? user = await UserRepository().getUser();
+    username = user?.name ?? '';
+    countryName = user?.countryName;
+    countryCode = user?.countryCode;
     safeNotify();
   }
 

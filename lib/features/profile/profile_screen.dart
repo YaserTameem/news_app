@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_svg_picture.dart';
 import 'package:news_app/features/auth/login_screen.dart';
@@ -60,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSizes.ph8),
                         Text(
-                          PreferencesManager().getString('username') ?? '',
+                          controller.username ?? '',
                           style: TextStyle(
                             fontSize: AppSizes.sp16,
                             fontWeight: FontWeight.w400,
@@ -115,6 +116,7 @@ class ProfileScreen extends StatelessWidget {
                     path: 'assets/images/log_out_icon.svg',
                     onTap: () async {
                       await PreferencesManager().clear();
+                      await UserRepository().deleteUser();
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginScreen()),
