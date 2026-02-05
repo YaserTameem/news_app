@@ -28,7 +28,7 @@ class _ProfileInfoBottomSheetState extends State<ProfileInfoBottomSheet> {
     final UserModel? user = await UserRepository().getUser();
     if (user != null) {
       usernameController.text = user.name;
-      emailController.text = user.email;
+      emailController.text = user.email!;
     }
   }
 

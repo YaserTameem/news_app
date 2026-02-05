@@ -7,20 +7,25 @@ class UserModel {
   @HiveField(0)
   final String name;
   @HiveField(1)
-  final String email;
+  final String? email;
   @HiveField(2)
-   String? password;
+  String? password;
   @HiveField(3)
   String? countryCode;
   @HiveField(4)
   String? countryName;
+  String? accessToken;
+
+  String? refreshToken;
 
   UserModel({
     required this.name,
-    required this.email,
-     this.password,
+    this.email,
+    this.password,
     this.countryCode,
     this.countryName,
+    this.accessToken,
+    this.refreshToken,
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +48,10 @@ class UserModel {
     );
   }
 
+  factory UserModel.fromAuthResponse(Map<String, dynamic> map, String username) {
+    return UserModel(name: username, accessToken: map['accessToken'], refreshToken: map['refreshToken']);
+  }
+
   UserModel copyWith({
     String? name,
     String? email,
@@ -57,5 +66,10 @@ class UserModel {
       countryCode: countryCode ?? this.countryCode,
       countryName: countryName ?? this.countryName,
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserModel{name: $name, email: $email, password: $password, countryCode: $countryCode, countryName: $countryName, accessToken: $accessToken, refreshToken: $refreshToken}';
   }
 }
