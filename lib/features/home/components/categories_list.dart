@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/features/home/categories_screen.dart';
 import 'package:news_app/features/home/components/view_all_component.dart';
-import 'package:news_app/features/home/home_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:news_app/features/home/cubit/home_cubit.dart';
+
+
 
 class CategoriesList extends StatelessWidget {
   CategoriesList({super.key});
@@ -12,8 +14,9 @@ class CategoriesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Consumer<HomeController>(
-        builder: (BuildContext context, HomeController value, Widget? child) {
+      child: BlocBuilder<HomeCubit, HomeState>(
+        builder: (BuildContext context, state) {
+          final value = context.read<HomeCubit>();
           return Column(
             children: [
               ViewAllComponent(
@@ -24,8 +27,8 @@ class CategoriesList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder:
-                          (_) => ChangeNotifierProvider.value(
-                            value: context.read<HomeController>(),
+                          (_) => BlocProvider.value(
+                            value: context.read<HomeCubit>(),
                             child: CategoriesScreen(),
                           ),
                     ),
@@ -33,7 +36,7 @@ class CategoriesList extends StatelessWidget {
                 },
               ),
               Padding(
-                padding:  EdgeInsets.only(top: AppSizes.ph8, bottom: AppSizes.ph16, left: AppSizes.pw16),
+                padding: EdgeInsets.only(top: AppSizes.ph8, bottom: AppSizes.ph16, left: AppSizes.pw16),
                 child: SizedBox(
                   height: AppSizes.h30,
                   child: ListView.separated(
@@ -44,7 +47,7 @@ class CategoriesList extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: categories.length,
                     itemBuilder: (context, index) {
-                      bool isSelected = value.selectedCategories == categories[index];
+                      bool isSelected = state.selectedCategories == categories[index];
                       return GestureDetector(
                         onTap: () => value.updateSelectedCategories(categories[index]),
                         child: IntrinsicWidth(

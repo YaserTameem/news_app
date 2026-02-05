@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/theme/light_theme.dart';
-import 'package:news_app/features/bookmark/bookmark_repository.dart';
+import 'package:news_app/features/bookmark/data/bookmark_repository.dart';
 import 'package:news_app/features/home/home_controller.dart';
 import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
@@ -18,8 +18,6 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
   await UserRepository().init();
   await BookmarkRepository().init();
-  // UserRepository().clearAll();
-  // PreferencesManager().clear();
 
   runApp(const MyApp());
 }

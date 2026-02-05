@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/extensions/date_time_extension.dart';
 import 'package:news_app/core/theme/light_colors.dart';
+import 'package:news_app/core/widgets/bookmark_button.dart';
 import 'package:news_app/core/widgets/custom_cached_network_image.dart';
-import 'package:news_app/core/widgets/custom_svg_picture.dart';
 import 'package:news_app/features/details/news_details_screen.dart';
 import 'package:news_app/features/home/models/news_articles_model.dart';
 
@@ -80,7 +80,10 @@ class NewsItem extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            CustomSvgPicture.withoutColor(path: 'assets/images/bookmark.svg'),
+                            BookmarkButton(
+                              article: model,
+                              size: 20,
+                            ),
                           ],
                         ),
                       ),

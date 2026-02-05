@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/remote_data/api_service.dart';
 import 'package:news_app/core/repos/news_repository.dart';
 import 'package:news_app/features/details/news_details_screen.dart';
-import 'package:news_app/features/home/components/news_item.dart';
-import 'package:news_app/features/search/search_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:news_app/features/search/cubit/search_cubit.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => SearchScreenController(NewsRepository(ApiService())),
+    return BlocProvider<SearchCubit>(
+      create: (_) => SearchCubit(NewsRepository(ApiService())),
       child: Scaffold(
         appBar: AppBar(title: Text('Search')),
         body: Padding(
           padding: EdgeInsets.all(AppSizes.pw16),
-          child: Consumer<SearchScreenController>(
-            builder: (BuildContext context, SearchScreenController controller, Widget? child) {
+          child: BlocBuilder<SearchCubit,SearchState>(
+            builder: (BuildContext context, state) {
+              final controller = context.read<SearchCubit>();
               return Column(
                 children: [
                   TextField(
@@ -47,9 +47,9 @@ class SearchScreen extends StatelessWidget {
                         return Divider(color: Color(0xFFD1DAD6));
                       },
                       padding: EdgeInsets.symmetric(vertical: AppSizes.ph20),
-                      itemCount: controller.newsEverythingList.length,
+                      itemCount: state.newsEverythingList.length,
                       itemBuilder: (context, index) {
-                        final model = controller.newsEverythingList[index];
+                        final model = state.newsEverythingList[index];
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: AppSizes.pw16),
                           child: ListTile(

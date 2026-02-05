@@ -1,79 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:news_app/core/theme/light_colors.dart';
-import 'package:news_app/features/main/main_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:news_app/features/bookmark/bookmark_screen.dart';
+import 'package:news_app/features/bookmark/data/bookmark_repository.dart';
+import 'package:news_app/features/home/home_screen.dart';
+import 'package:news_app/features/profile/profile_screen.dart';
+import 'package:news_app/features/search/search_screen.dart';
 
-class MainScreen extends StatelessWidget {
+
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(BuildContext _) {
-    return ChangeNotifierProvider(
-      create: (_) => MainController(),
-      builder: (context, _) {
-        return Consumer<MainController>(
-          builder: (BuildContext context, MainController value, Widget? child) {
-            return Scaffold(
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: value.currentIndex,
-                onTap: value.changeIndex,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/home_icon.svg',
-                      colorFilter: ColorFilter.mode(
-                        value.currentIndex == 0
-                            ? LightColors.primaryColor
-                            : LightColors.textSecondaryColor,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/search_icon.svg',
-                      colorFilter: ColorFilter.mode(
-                        value.currentIndex == 1
-                            ? LightColors.primaryColor
-                            : LightColors.textSecondaryColor,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    label: 'Search',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/bookmark_icon.svg',
-                      colorFilter: ColorFilter.mode(
-                        value.currentIndex == 2
-                            ? LightColors.primaryColor
-                            : LightColors.textSecondaryColor,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    label: 'Bookmark',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/profile_icon.svg',
-                      colorFilter: ColorFilter.mode(
-                        value.currentIndex == 3
-                            ? LightColors.primaryColor
-                            : LightColors.textSecondaryColor,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    label: 'Profile',
-                  ),
-                ],
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+  int _bookmarkCount = 0;
+
+  final List<Widget> _screens = [HomeScreen(), SearchScreen(), BookmarkScreen(), ProfileScreen()];
+
+  @override
+  void initState() {
+    super.initState();
+    _updateBookmarkCount();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update bookmark count when screen becomes visible
+    _updateBookmarkCount();
+  }
+
+  void _updateBookmarkCount() {
+    setState(() {
+      _bookmarkCount = BookmarkRepository().getBookmarkCount();
+    });
+  }
+
+  Widget _buildBookmarkIcon() {
+    if (_bookmarkCount == 0) {
+      return SvgPicture.asset(
+        'assets/images/bookmark_icon.svg',
+        colorFilter: ColorFilter.mode(
+          _currentIndex == 2 ? LightColors.primaryColor : LightColors.textSecondaryColor,
+          BlendMode.srcIn,
+        ),
+      );
+    }
+
+    return Badge(label: Text(_bookmarkCount.toString()), child: const Icon(Icons.bookmark_border));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          // Update bookmark count when navigating away from bookmark screen
+          if (_currentIndex == 2) {
+            _updateBookmarkCount();
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/images/home_icon.svg',
+              colorFilter: ColorFilter.mode(
+                _currentIndex == 0 ? LightColors.primaryColor : LightColors.textSecondaryColor,
+                BlendMode.srcIn,
               ),
-              body: value.screensList[value.currentIndex],
-            );
-          },
-        );
-      },
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/images/search_icon.svg',
+              colorFilter: ColorFilter.mode(
+                _currentIndex == 1 ? LightColors.primaryColor : LightColors.textSecondaryColor,
+                BlendMode.srcIn,
+              ),
+            ),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(icon: _buildBookmarkIcon(), label: 'Bookmark'),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/images/profile_icon.svg',
+              colorFilter: ColorFilter.mode(
+                _currentIndex == 3 ? LightColors.primaryColor : LightColors.textSecondaryColor,
+                BlendMode.srcIn,
+              ),
+            ),
+            label: 'Profile',
+          ),
+        ],
+      ),
+      body: _screens[_currentIndex],
     );
   }
 }

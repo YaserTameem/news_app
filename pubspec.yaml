@@ -24,6 +24,10 @@ dependencies:
   image_picker: ^1.2.1
   country_picker: ^2.0.27
   hive_ce_flutter: ^2.3.4
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.8
+  hydrated_bloc: ^10.1.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

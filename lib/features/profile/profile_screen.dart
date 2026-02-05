@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
@@ -10,7 +11,7 @@ import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_svg_picture.dart';
 import 'package:news_app/features/auth/login_screen.dart';
 import 'package:news_app/features/profile/bottom_sheet/profile_info_bottom_sheet.dart';
-import 'package:news_app/features/profile/profile_controller.dart';
+import 'package:news_app/features/profile/cubit/profile_cubit.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -18,14 +19,15 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ProfileController>(
-      create: (BuildContext context) => ProfileController(),
+    return BlocProvider<ProfileCubit>(
+      create: (BuildContext context) => ProfileCubit(),
       child: Scaffold(
         appBar: AppBar(title: Text("Profile")),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: AppSizes.ph24, horizontal: AppSizes.pw16),
-          child: Consumer<ProfileController>(
-            builder: (BuildContext context, ProfileController controller, Widget? child) {
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (BuildContext context, state) {
+              final controller = context.read<ProfileCubit>();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -38,9 +40,9 @@ class ProfileScreen extends StatelessWidget {
                             CircleAvatar(
                               backgroundColor: Colors.transparent,
                               backgroundImage:
-                                  controller.selectedImage == null
+                                  state.selectedImage == null
                                       ? AssetImage('assets/images/profile_image.png')
-                                      : FileImage(File(controller.selectedImage!.path)),
+                                      : FileImage(File(state.selectedImage!.path)),
                               radius: AppSizes.r60,
                             ),
                             GestureDetector(
@@ -61,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSizes.ph8),
                         Text(
-                          controller.username ?? '',
+                          state.username ?? '',
                           style: TextStyle(
                             fontSize: AppSizes.sp16,
                             fontWeight: FontWeight.w400,
@@ -95,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {},
                   ),
                   _buildProfileItem(
-                    title: controller.countryName ?? 'Country',
+                    title: state.countryName ?? 'Country',
                     path: 'assets/images/flag_icon4.svg',
                     onTap: () {
                       showCountryPicker(
@@ -135,7 +137,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void showImageSourceDialog(BuildContext context) {
-    final controller = context.read<ProfileController>();
+    final controller = context.read<ProfileCubit>();
     showDialog(
       context: context,
       builder: (BuildContext context) {

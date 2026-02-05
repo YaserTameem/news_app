@@ -1,14 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
-import 'package:news_app/core/extensions/date_time_extension.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/features/home/components/news_item.dart';
-import 'package:news_app/features/home/home_controller.dart';
-import 'package:provider/provider.dart';
-
-import '../../core/widgets/custom_cached_network_image.dart';
+import 'package:news_app/features/home/cubit/home_cubit.dart';
 
 class CategoriesScreen extends StatelessWidget {
   CategoriesScreen({super.key});
@@ -17,8 +12,9 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Categories')),
-      body: Consumer<HomeController>(
-        builder: (BuildContext context, HomeController value, Widget? child) {
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (BuildContext context, state) {
+          final value = context.read<HomeCubit>();
           return Column(
             children: [
               Padding(
@@ -33,7 +29,7 @@ class CategoriesScreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: categories.length,
                     itemBuilder: (context, index) {
-                      bool isSelected = value.selectedCategories == categories[index];
+                      bool isSelected = state.selectedCategories == categories[index];
                       return GestureDetector(
                         onTap: () => value.updateSelectedCategories(categories[index]),
                         child: IntrinsicWidth(
@@ -61,9 +57,9 @@ class CategoriesScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: value.newsTopHeadLineList.length,
+                  itemCount: state.newsTopHeadLineList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final model = value.newsTopHeadLineList[index];
+                    final model = state.newsTopHeadLineList[index];
                     return NewsItem(model: model);
                   },
                 ),
