@@ -13,13 +13,13 @@ class AuthRepository {
       "username": username,
       "password": password,
       "expiresInMins": 30,
-    });
-  UserModel model=  UserModel.fromAuthResponse(response, username);
- await _saveUser(model);
- return model;
+    }, );
+    UserModel model = UserModel.fromAuthResponse(response, username);
+    await _saveUser(model);
+    return model;
   }
 
-  Future _saveUser(UserModel model) async{
-   await UserRepository().saveUser(model);
+  Future _saveUser(UserModel model) async {
+    await UserRepository().saveUser(model);
   }
 }

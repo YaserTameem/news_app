@@ -29,7 +29,7 @@ class UserRepository {
     await userBox.put(Constants.currentUser, user);
   }
 
-  getUser() {
+ UserModel? getUser() {
     return userBox.get(Constants.currentUser);
   }
 

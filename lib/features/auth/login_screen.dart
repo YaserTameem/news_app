@@ -5,6 +5,7 @@ import 'package:news_app/core/constants/app_sizes.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/core/datasource/remote_data/api_service.dart';
+import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/core/theme/light_colors.dart';
 import 'package:news_app/core/widgets/custom_text_form_filed.dart';
 import 'package:news_app/features/auth/cubit/auth_cubit.dart';
@@ -25,8 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  String? errorMessage;
-  bool isLoading = false;
 
   @override
   dispose() {
@@ -35,165 +34,150 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  login() async {
-    setState(() {
-      errorMessage = null;
-      isLoading = true;
-    });
-    await Future.delayed(Duration(seconds: 2));
-    // final savedEmail = PreferencesManager().getString("user_email");
-    // final savedPassword = PreferencesManager().getString("user_password");
-    final String? error = await UserRepository().login(
-      usernameController.text.trim(),
-      passwordController.text.trim(),
-    );
-    if (error != null) {
-      setState(() {
-        errorMessage = error;
-        isLoading = false;
-      });
-      return;
-    }
-    await PreferencesManager().setBool("is_logged_in", true);
-
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
-    setState(() {
-      errorMessage = null;
-      isLoading = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AuthCubit(AuthRepository(ApiService())),
       child: Scaffold(
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/background_image.png"),
-              fit: BoxFit.fill,
+        body: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state.requestStatusEnum == RequestStatusEnum.loaded) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/background_image.png"),
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          child: BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              final controller = context.read<AuthCubit>();
-              return Padding(
-                padding: EdgeInsets.all(AppSizes.pw16),
-                child: Form(
-                  key: _key,
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(child: Image.asset("assets/images/logo.png", height: AppSizes.h45)),
-                          SizedBox(height: AppSizes.ph40),
-                          Text(
-                            "Welcome to Newts",
-                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
-                          ),
-                          SizedBox(height: AppSizes.ph16),
-
-                          CustomTextFormField(
-                            controller: usernameController,
-                            title: 'Email',
-                            hintText: 'usama@gmail.com',
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter Email';
-                              }
-                              // final RegExp emailRegex = RegExp(
-                              //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                              // );
-                              // if (!emailRegex.hasMatch(value)) {
-                              //   return 'Please Enter Valid Email';
-                              // }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: AppSizes.ph24),
-                          CustomTextFormField(
-                            controller: passwordController,
-                            title: 'Password',
-                            hintText: '*************',
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter password';
-                              }
-
-                              // final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
-                              //
-                              // if (!passwordRegex.hasMatch(value)) {
-                              //   return 'Password must be at least 8 characters';
-                              // }
-                              return null;
-                            },
-                          ),
-                          if (errorMessage != null)
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
-                              child: Text(errorMessage!, style: TextStyle(color: Colors.red)),
+            child: BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                final controller = context.read<AuthCubit>();
+                return Padding(
+                  padding: EdgeInsets.all(AppSizes.pw16),
+                  child: Form(
+                    key: _key,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(child: Image.asset("assets/images/logo.png", height: AppSizes.h45)),
+                            SizedBox(height: AppSizes.ph40),
+                            Text(
+                              "Welcome to Newts",
+                              style: TextStyle(fontWeight: FontWeight.w700, fontSize: AppSizes.sp20),
                             ),
-                          SizedBox(height: AppSizes.ph24),
-                          SizedBox(
-                            width: double.infinity,
-                            height: AppSizes.h48,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (_key.currentState?.validate() ?? false) {
-                                  controller.login(
-                                    username: usernameController.text,
-                                    password: passwordController.text,
-                                  );
+                            SizedBox(height: AppSizes.ph16),
+
+                            CustomTextFormField(
+                              controller: usernameController,
+                              title: 'Email',
+                              hintText: 'usama@gmail.com',
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter Email';
                                 }
+                                // final RegExp emailRegex = RegExp(
+                                //   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                // );
+                                // if (!emailRegex.hasMatch(value)) {
+                                //   return 'Please Enter Valid Email';
+                                // }
+                                return null;
                               },
-                              child: isLoading ? CircularProgressIndicator() : Text('Sign In'),
                             ),
-                          ),
-                          SizedBox(height: AppSizes.ph24),
-                          Center(
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Don’t have an account ?  ",
-                                style: TextStyle(
-                                  fontSize: AppSizes.sp14,
-                                  fontWeight: FontWeight.w400,
-                                  color: LightColors.textPrimaryColor,
-                                ),
+                            SizedBox(height: AppSizes.ph24),
+                            CustomTextFormField(
+                              controller: passwordController,
+                              title: 'Password',
+                              hintText: '*************',
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter password';
+                                }
 
-                                children: [
-                                  TextSpan(
-                                    recognizer:
-                                        TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => RegisterScreen()),
-                                            );
-                                          },
-                                    text: 'Sign Up',
-                                    style: TextStyle(
-                                      fontSize: AppSizes.sp14,
-                                      fontWeight: FontWeight.w400,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ],
+                                // final RegExp passwordRegex = RegExp(r'^(?=.*\d).{8,}$');
+                                //
+                                // if (!passwordRegex.hasMatch(value)) {
+                                //   return 'Password must be at least 8 characters';
+                                // }
+                                return null;
+                              },
+                            ),
+                            if (state.errorMessage != null)
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: AppSizes.ph8),
+                                child: Text(state.errorMessage!, style: TextStyle(color: Colors.red)),
+                              ),
+                            SizedBox(height: AppSizes.ph24),
+                            SizedBox(
+                              width: double.infinity,
+                              height: AppSizes.h48,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_key.currentState?.validate() ?? false) {
+                                    controller.login(
+                                      username: usernameController.text,
+                                      password: passwordController.text,
+                                    );
+                                  }
+                                },
+                                child:
+                                    state.requestStatusEnum == RequestStatusEnum.loading
+                                        ? CircularProgressIndicator()
+                                        : Text('Sign In'),
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: AppSizes.ph24),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Don’t have an account ?  ",
+                                  style: TextStyle(
+                                    fontSize: AppSizes.sp14,
+                                    fontWeight: FontWeight.w400,
+                                    color: LightColors.textPrimaryColor,
+                                  ),
+
+                                  children: [
+                                    TextSpan(
+                                      recognizer:
+                                          TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => RegisterScreen(),
+                                                ),
+                                              );
+                                            },
+                                      text: 'Sign Up',
+                                      style: TextStyle(
+                                        fontSize: AppSizes.sp14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

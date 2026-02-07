@@ -17,10 +17,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> getUserData() async {
-    final UserModel? user = await UserRepository().getUser();
+    final UserModel? user =  UserRepository().getUser();
     emit(
       state.copyWith(
-        username: user?.name ?? '',
+        username: user?.name ??  '',
         countryName: user?.countryName,
         countryCode: user?.countryCode,
       ),

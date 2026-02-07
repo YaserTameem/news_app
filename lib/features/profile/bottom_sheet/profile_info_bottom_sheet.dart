@@ -25,10 +25,10 @@ class _ProfileInfoBottomSheetState extends State<ProfileInfoBottomSheet> {
   }
 
   Future<void> _loadUserData() async {
-    final UserModel? user = await UserRepository().getUser();
+    final UserModel? user =  UserRepository().getUser();
     if (user != null) {
       usernameController.text = user.name;
-      emailController.text = user.email!;
+      emailController.text = user.email??'';
     }
   }
 
