@@ -14,8 +14,9 @@ class UserModel {
   String? countryCode;
   @HiveField(4)
   String? countryName;
+  @HiveField(5)
   String? accessToken;
-
+  @HiveField(6)
   String? refreshToken;
 
   UserModel({

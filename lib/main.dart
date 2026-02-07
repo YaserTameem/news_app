@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
 import 'package:news_app/core/datasource/local_data/user_repository.dart';
+import 'package:news_app/core/datasource/remote_data/dio_example.dart';
 import 'package:news_app/core/theme/light_theme.dart';
 import 'package:news_app/features/bookmark/data/bookmark_repository.dart';
 import 'package:news_app/features/home/home_controller.dart';
@@ -18,7 +19,7 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
   await UserRepository().init();
   await BookmarkRepository().init();
-
+  DioExample.exampleGetRequest();
   runApp(const MyApp());
 }
 

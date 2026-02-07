@@ -74,7 +74,7 @@ class UserRepository {
 
   Future<String?> signUp({required String name, required String email, required String password}) async {
     final existingUser = getUser();
-    if (existingUser != null) {
+    if (existingUser != null&& existingUser.email == email) {
       return 'An account with this email already exists';
     }
     final newUser = UserModel(name: name, email: email, password: password);
