@@ -1,5 +1,5 @@
 class AuthApiConfig {
-  static const String authBaseUrl="dummyjson.com";
+  static const String authBaseUrl="https://dummyjson.com/";
 
 ///Auth EndPoints
   static const String login="auth/login";
