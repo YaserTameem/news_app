@@ -1,8 +1,10 @@
+
 import 'package:dio/dio.dart';
+import 'package:news_app/core/datasource/remote_data/auth/auth_api_config.dart';
 import 'package:news_app/core/datasource/remote_data/interceptors/auth_interceptor.dart';
 import 'package:news_app/core/datasource/remote_data/interceptors/logging_interceptor.dart';
 
-class DioConfig {
+class AuthDioConfig {
   static Dio createDio() {
     final dio = Dio(
       BaseOptions(

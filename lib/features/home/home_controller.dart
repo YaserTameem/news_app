@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/core/datasource/remote_data/api_config.dart';
-import 'package:news_app/core/datasource/remote_data/api_service.dart';
+import 'package:news_app/core/datasource/remote_data/auth/auth_api_config.dart';
+import 'package:news_app/core/datasource/remote_data/news/news_api_service.dart';
 import 'package:news_app/core/enums/request_status_enum.dart';
 import 'package:news_app/core/mixins/safe_notify_mixin.dart';
 import 'package:news_app/core/repos/news_repository.dart';

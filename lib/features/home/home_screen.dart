@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/core/datasource/remote_data/api_service.dart';
+import 'package:news_app/core/datasource/remote_data/news/news_api_service.dart';
 import 'package:news_app/core/repos/news_repository.dart';
 import 'package:news_app/features/home/components/categories_list.dart';
 import 'package:news_app/features/home/components/top_headline.dart';
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext _) {
     return BlocProvider(
-      create: (context) => HomeCubit(NewsRepository(ApiService())),
+      create: (context) => HomeCubit(NewsRepository(NewsApiService())),
       child: Scaffold(
         body: CustomScrollView(slivers: [TrendingNews(), CategoriesList(), TopHeadline()]),
       ),

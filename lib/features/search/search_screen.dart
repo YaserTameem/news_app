@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/constants/app_sizes.dart';
-import 'package:news_app/core/datasource/remote_data/api_service.dart';
+import 'package:news_app/core/datasource/remote_data/news/news_api_service.dart';
 import 'package:news_app/core/repos/news_repository.dart';
 import 'package:news_app/features/details/news_details_screen.dart';
 import 'package:news_app/features/search/cubit/search_cubit.dart';
@@ -12,7 +12,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SearchCubit>(
-      create: (_) => SearchCubit(NewsRepository(ApiService())),
+      create: (_) => SearchCubit(NewsRepository(NewsApiService())),
       child: Scaffold(
         appBar: AppBar(title: Text('Search')),
         body: Padding(
