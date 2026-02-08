@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/datasource/local_data/preferences_manager.dart';
+import 'package:news_app/core/datasource/local_data/user_repository.dart';
 import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/auth/login_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
@@ -23,10 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 1));
     final onboardingComplete = PreferencesManager().getBool('onboarding_complete') ?? false;
     final isLoggedIn = PreferencesManager().getBool('is_logged_in') ?? false;
+    final hasAccessToken =UserRepository().getUser()?.accessToken!=null;
     if (!mounted) return;
     if (!onboardingComplete) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
-    } else if (!isLoggedIn) {
+    } else if (!isLoggedIn&&!hasAccessToken) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));

@@ -117,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Logout',
                     path: 'assets/images/log_out_icon.svg',
                     onTap: () async {
-                      await PreferencesManager().clear();
+                      await PreferencesManager().remove('is_logged_in');
                       await UserRepository().deleteUser();
                       Navigator.pushReplacement(
                         context,

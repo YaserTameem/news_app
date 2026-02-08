@@ -19,6 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
       final userModel = await authRepository.login(username: username, password: password);
       if (userModel != null) {
         emit(state.copyWith(requestStatusEnum: RequestStatusEnum.loaded, userModel: userModel));
+        await PreferencesManager().setBool("is_logged_in", true);
       }
     } catch (e) {
       emit(state.copyWith(requestStatusEnum: RequestStatusEnum.error, errorMessage: e.toString()));
@@ -35,6 +36,5 @@ class AuthCubit extends Cubit<AuthState> {
     }
     await PreferencesManager().setBool("is_logged_in", true);
     emit(state.copyWith(requestStatusEnum: RequestStatusEnum.loaded, errorMessage: null));
-
   }
 }

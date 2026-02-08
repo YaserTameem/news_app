@@ -7,7 +7,7 @@ import 'package:news_app/core/datasource/remote_data/api_config.dart';
 abstract class BaseApiService {
   Future<dynamic> get(String endPoint, String baseUrl, Map<String, dynamic>? params);
 
-  Future<dynamic> getWithToken(String endPoint, String baseUrl, String? token);
+  Future<dynamic> getWithToken(String endPoint, String baseUrl, );
 
   Future<dynamic> post(String endPoint, String baseUrl, Map<String, dynamic>? body);
 }
@@ -31,10 +31,6 @@ class ApiService extends BaseApiService {
       "Content-Type": "application/json",
       "accept": "application/json",
     };
-    final token = UserRepository().getUser()?.accessToken;
-    if (token != null) {
-      headers["Authorization"] = "Bearer $token";
-    }
     try {
       final http.Response response = await http.post(url, headers: headers, body: jsonEncode(body));
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
@@ -49,15 +45,12 @@ class ApiService extends BaseApiService {
   }
 
   @override
-  Future getWithToken(String endPoint, String baseUrl, String? token) async {
+  Future getWithToken(String endPoint, String baseUrl,) async {
     var url = Uri.https(baseUrl, endPoint);
     final Map<String, String> headers = {
       "accept": "application/json",
       "Content-Type": "application/json",
     };
-    if (token != null) {
-      headers["Authorization"] = "Bearer, $token";
-    }
     try {
       final http.Response response = await http.get(url, headers: headers);
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
